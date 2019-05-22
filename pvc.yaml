@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: promPVC
+  name: pvc_prom
 spec:
   accessModes:
     - ReadWriteOnce
