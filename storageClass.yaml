@@ -3,8 +3,7 @@ apiVersion: storage.k8s.io/v1beta1
 metadata:
   name: slow
   annotations:
-  - name: storageclass.kubernetes.io/is-default-class
-    value: true
+    storageclass.kubernetes.io/is-default-class: true
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-standard
