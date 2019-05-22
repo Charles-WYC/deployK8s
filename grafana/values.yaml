@@ -144,7 +144,7 @@ extraContainers: |
 ##
 persistence:
   enabled: false
-  storageClassName: default
+  # storageClassName: default
   accessModes:
     - ReadWriteOnce
   size: 10Gi
