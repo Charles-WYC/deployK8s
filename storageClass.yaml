@@ -2,4 +2,12 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: local
-provisioner: kubernetes.io/no-provisioner
+provisioner: kubernetes.io/
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cinder
+provisioner: kubernetes.io/cinder
+parameters:
+  availability: nova
