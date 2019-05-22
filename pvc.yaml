@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: pvc-prom
 spec:
-  serviceAccount: nfs-client-provisioner
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
