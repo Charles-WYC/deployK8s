@@ -1,5 +1,7 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
+annotations:
+  storageclass.kubernetes.io/is-default-class: true
 metadata:
   name: slow
 provisioner: kubernetes.io/gce-pd
