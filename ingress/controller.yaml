@@ -18,7 +18,7 @@ spec:
       # like with kubeadm
       # hostNetwork: true
       terminationGracePeriodSeconds: 60
-      hostNetwork: true
+      # hostNetwork: true
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
       - image: registry.cn-shanghai.aliyuncs.com/ms_google_containers/nginx-ingress-controller
@@ -37,9 +37,9 @@ spec:
           timeoutSeconds: 1
         ports:
         - containerPort: 80
-          hostPort: 30328
+          hostPort: 80
         - containerPort: 443
-          hostPort: 30329
+          hostPort: 443
         env:
           - name: POD_NAME
             valueFrom:
