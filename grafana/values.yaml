@@ -76,10 +76,10 @@ downloadDashboardsImage:
 ## ref: http://kubernetes.io/docs/user-guide/services/
 ##
 service:
-  type: ClusterIP
+  type: NodePort
   port: 80
   targetPort: 3000
-  # nodePort: 30000
+  nodePort: 30306
     # targetPort: 4181 To be used with a proxy extraContainer
   annotations: {}
   labels: {}
