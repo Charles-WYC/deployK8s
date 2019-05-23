@@ -10,5 +10,5 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: default/graf-grafana
+          serviceName: graf-grafana
           servicePort: 80
