@@ -10,5 +10,5 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: graf-grafana
+          serviceName: graf-grafana.default.svc.cluster.local
           servicePort: 80
