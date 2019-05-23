@@ -21,7 +21,7 @@ spec:
       # hostNetwork: true
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
-      - image: registry.cn-shanghai.aliyuncs.com/ms_google_containers/nginx-ingress-controller
+      - image: registry.cn-shanghai.aliyuncs.com/ms_google_containers/nginx-ingress-controller:0.23.0
         name: nginx-ingress-controller
         readinessProbe:
           httpGet:
