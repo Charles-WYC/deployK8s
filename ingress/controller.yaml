@@ -21,7 +21,7 @@ spec:
       hostNetwork: true
       serviceAccountName: nginx-ingress-serviceaccount
       containers:
-      - image: harbor-demo.dianrong.com/kubernetes/nginx-ingress-controller:0.9.0-beta.1
+      - image: registry.cn-shanghai.aliyuncs.com/ms_google_containers/nginx-ingress-controller
         name: nginx-ingress-controller
         readinessProbe:
           httpGet:
