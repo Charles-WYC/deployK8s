@@ -107,9 +107,9 @@ affinity: {}
 
 podAnnotations: {}
   # iam.amazonaws.com/role: "logstash-role"
-  # prometheus.io/scrape: "true"
-  # prometheus.io/path: "/metrics"
-  # prometheus.io/port: "9198"
+  prometheus.io/scrape: "true"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "9198"
 
 podLabels: {}
   # team: "developers"
@@ -173,7 +173,7 @@ volumes: []
 
 exporter:
   logstash:
-    enabled: false
+    enabled: true
     image:
       repository: bonniernews/logstash_exporter
       tag: v0.1.2
