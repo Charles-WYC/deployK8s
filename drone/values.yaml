@@ -85,7 +85,7 @@ sourceControl:
   # "clientSecretValue" for the value. Be awere to not leak shis file with your password
   github:
     clientID: c370ca127a1ab25eefeb
-    clientSecretKey: drone-server-secrets-source-control
+    clientSecretKey: clientSecret
     clientSecretValue: a077fe557047e8377354501d1962a86ffe4e960d
     server: https://github.com
   gitlab:
