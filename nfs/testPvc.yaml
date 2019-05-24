@@ -10,3 +10,17 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: nfs-storage
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-graf
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: nfs-storage

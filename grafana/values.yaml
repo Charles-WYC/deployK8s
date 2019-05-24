@@ -151,7 +151,7 @@ persistence:
   size: 10Gi
   # annotations: {}
   # subPath: ""
-  # existingClaim:
+  existingClaim: "pvc-graf"
 
 initChownData:
   ## If false, data ownership will not be reset at startup
