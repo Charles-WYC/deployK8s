@@ -19,8 +19,6 @@ spec:
       - name: metrics
         image: danielqsj/kafka-exporter
         command:
-          - --kafka.server=10.1.0.11:9092
-          - --kafka.server=10.1.0.12:9092 
-          - --kafka.server=10.1.0.13:9092
+          - kafka_exporter --kafka.server=10.1.0.11:9092 --kafka.server=10.1.0.12:9092 --kafka.server=10.1.0.13:9092
         ports:
         - containerPort: 9308
