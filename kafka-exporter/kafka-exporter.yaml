@@ -23,5 +23,4 @@ spec:
           - --kafka.server=10.1.0.12:9092
           - --kafka.server=10.1.0.13:9092
         ports:
-        - port: 9308
-          containerPort: 9308
+        - containerPort: 9308
