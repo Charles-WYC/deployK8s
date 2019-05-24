@@ -77,7 +77,7 @@ sourceControl:
   provider: github
   ## secret containing your source control provider secrets, keys provided below.
   ## if left blank will assume a secret based on the release name of the chart.
-  secret: drone-server-secrets
+  secret:
   ## Fill in the correct values for your chosen source control provider
   ## Any key in this list with the suffix `Key` will be fetched from the
   ## secret named above, if not provided the secret it will be created as
