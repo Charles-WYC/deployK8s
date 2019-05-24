@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka_exporter
+  name: kafka-exporter
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kafka_exporter
+      app: kafka-exporter
   template:
     metadata:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9308"
       labels:
-        app: kafka_exporter
+        app: kafka-exporter
     spec:
       containers:
       - name: metrics
