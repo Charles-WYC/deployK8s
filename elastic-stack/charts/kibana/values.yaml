@@ -27,7 +27,7 @@ files:
     server.host: "0"
     ## For kibana < 6.6, use elasticsearch.url instead
     # elasticsearch.hosts: http://elasticsearch:9200
-    elasticsearch.url: elas-elasticsearch-client.default.svc.cluster.local:9200
+    elasticsearch.url: http://elas-elasticsearch-client.default.svc.cluster.local:9200
     ## Custom config properties below
     ## Ref: https://www.elastic.co/guide/en/kibana/current/settings.html
     # server.port: 5601
@@ -38,11 +38,12 @@ deployment:
   annotations: {}
 
 service:
-  type: ClusterIP
+  type: NodePort
   # clusterIP: None
   # portName: kibana-svc
   externalPort: 443
   internalPort: 5601
+  nodePort: 30309
   # authProxyPort: 5602 To be used with authProxyEnabled and a proxy extraContainer
   ## External IP addresses of service
   ## Default: nil
