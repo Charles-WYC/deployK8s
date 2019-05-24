@@ -105,7 +105,7 @@ affinity: {}
   #         matchLabels:
   #           release: logstash
 
-podAnnotations: {}
+podAnnotations:
   # iam.amazonaws.com/role: "logstash-role"
   prometheus.io/scrape: "true"
   prometheus.io/path: "/metrics"
