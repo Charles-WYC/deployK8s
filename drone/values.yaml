@@ -112,7 +112,7 @@ server:
   ## If not set, it will be autofilled with the cluster host.
   ## Host shoud be just the hostname.
   ##
-  # host: "drone.domain.io"
+  host: "http://202.120.40.8:30308"
 
   ## protocol should be http or https
   protocol: http
