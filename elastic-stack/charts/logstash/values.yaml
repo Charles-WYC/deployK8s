@@ -203,7 +203,7 @@ exporter:
       successThreshold: 1
 
 elasticsearch:
-  host: elasticsearch-client.default.svc.cluster.local
+  host: elas-elasticsearch-client.default.svc.cluster.local
   port: 9200
 
 ## ref: https://github.com/elastic/logstash-docker/blob/master/build/logstash/env2yaml/env2yaml.go
