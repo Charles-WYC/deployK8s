@@ -564,7 +564,7 @@ server:
   global:
     ## How frequently to scrape targets by default
     ##
-    scrape_interval: 1m
+    scrape_interval: 10s
     ## How long until a scrape request times out
     ##
     scrape_timeout: 10s
@@ -723,7 +723,7 @@ server:
 
   ## Use a StatefulSet if replicaCount needs to be greater than 1 (see below)
   ##
-  replicaCount: 1
+  replicaCount: 3
 
   statefulSet:
     ## If true, use a statefulset instead of a deployment for pod management.
