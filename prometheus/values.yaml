@@ -8,7 +8,7 @@ imagePullSecrets:
 ##
 serviceAccounts:
   alertmanager:
-    create: true
+    create: false
     name:
   kubeStateMetrics:
     create: true
@@ -17,7 +17,7 @@ serviceAccounts:
     create: true
     name:
   pushgateway:
-    create: true
+    create: false
     name:
   server:
     create: true
@@ -305,7 +305,7 @@ initChownData:
 kubeStateMetrics:
   ## If false, kube-state-metrics will not be installed
   ##
-  enabled: true
+  enabled: false
 
   ## kube-state-metrics container name
   ##
@@ -729,7 +729,7 @@ server:
     ## If true, use a statefulset instead of a deployment for pod management.
     ## This allows to scale replicas to more than 1 pod
     ##
-    enabled: false
+    enabled: true
 
     annotations: {}
     podManagementPolicy: OrderedReady
