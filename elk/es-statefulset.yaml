@@ -51,7 +51,7 @@ metadata:
   namespace: default
   labels:
     k8s-app: elasticsearch-logging
-    version: v6.6.1
+    version: 6.8.0
     addonmanager.kubernetes.io/mode: Reconcile
 spec:
   serviceName: elasticsearch-logging
@@ -59,16 +59,16 @@ spec:
   selector:
     matchLabels:
       k8s-app: elasticsearch-logging
-      version: v6.7.2
+      version: 6.8.0
   template:
     metadata:
       labels:
         k8s-app: elasticsearch-logging
-        version: v6.7.2
+        version: 6.8.0
     spec:
       serviceAccountName: elasticsearch-logging
       containers:
-      - image: gcr.io/fluentd-elasticsearch/elasticsearch:v6.6.1
+      - image: elastic/elasticsearch:6.8.0
         name: elasticsearch-logging
         resources:
           # need more cpu upon initialization, therefore burstable class
