@@ -6,7 +6,7 @@ dashboardImport:
   dashboards:
     1_create_index: |-
       {
-        "version": "6.7.0",
+        "version": "6.8.0",
         "objects": [
           {
             "id": "a88738e0-d3c1-11e8-b38e-a37c21cf8c95",
