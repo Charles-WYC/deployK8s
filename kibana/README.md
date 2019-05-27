@@ -1,102 +1,146 @@
-# Kibana Helm Chart
+# kibana
 
-This functionality is in alpha status and may be changed or removed completely in a future release. Elastic will take a best effort approach to fix any issues, but alpha features are not subject to the support SLA of official GA features.
+[kibana](https://github.com/elastic/kibana) is your window into the Elastic Stack. Specifically, it's an open source (Apache Licensed), browser-based analytics and search dashboard for Elasticsearch.
 
-This helm chart is a lightweight way to configure and run our official [Kibana docker image](https://www.elastic.co/guide/en/kibana/current/docker.html)
+## TL;DR;
 
-## Requirements
+```console
+$ helm install stable/kibana
+```
 
-* Kubernetes 1.8/1.9/1.10/1.11
-* [Helm](https://helm.sh/)
+## Introduction
 
-## Installing
+This chart bootstraps a kibana deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-* Add the elastic helm charts repo
-  ```
-  helm repo add elastic https://helm.elastic.co
-  ```
-* Install it
-  ```
-  helm install --name kibana elastic/kibana --version 6.6.2-alpha1
-  ```
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```console
+$ helm install stable/kibana --name my-release
+```
+
+The command deploys kibana on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+NOTE : We notice that lower resource constraints given to the chart + plugins are likely not going to work well.
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` deployment:
+
+```console
+$ helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-| Parameter                 | Description                                                                                                                                                                                                                                                                                                                                                    | Default                                                                                                                   |
-|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| `elasticsearchURL`        | The URL used to connect to Elasticsearch. Deprecated in Kibana 7.0.0 and up.
-| `elasticsearchHosts`      | The URLs used to connect to Elasticsearch. Supported in Kibana 6.6.0 and up.                                                                                                                                                                                                                                                                                   | `http://elasticsearch-master:9200`                                                                                        |
-| `replicas`                | Kubernetes replica count for the deployment (i.e. how many pods)                                                                                                                                                                                                                                                                                               | `1`                                                                                                                       |
-| `extraEnvs`               | Extra [environment variables](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#using-environment-variables-inside-of-your-config) which will be appended to the `env:` definition for the container                                                                                                             | `{}`                                                                                                                      |
-| `secretMounts`            | Allows you easily mount a secret as a file inside the deployment. Useful for mounting certificates and other secrets. See [values.yaml](./values.yaml) for an example                                                                                                                                                                                          | `{}`                                                                                                                      |
-| `image`                   | The Kibana docker image                                                                                                                                                                                                                                                                                                                                        | `docker.elastic.co/kibana/kibana`                                                                                         |
-| `imageTag`                | The Kibana docker image tag                                                                                                                                                                                                                                                                                                                                    | `6.6.2`                                                                                                                   |
-| `imagePullPolicy`         | The Kubernetes [imagePullPolicy](https://kubernetes.io/docs/concepts/containers/images/#updating-images) value                                                                                                                                                                                                                                                 | `IfNotPresent`                                                                                                            |
-| `resources`               | Allows you to set the [resources](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/) for the statefulset                                                                                                                                                                                                                   | `requests.cpu: 100m`<br>`requests.memory: 2Gi`<br>`limits.cpu: 1000m`<br>`limits.memory: 2Gi`                             |
-| `protocol`                | The protocol that will be used for the readinessProbe. Change this to `https` if you have `server.ssl.enabled: true` set                                                                                                                                                                                                                                       | `http`                                                                                                                    |
-| `kibanaConfig`            | Allows you to add any config files in `/usr/share/kibana/config/` such as `kibana.yml`. See [values.yaml](./values.yaml) for an example of the formatting.                                                                                                                                                                                                     | `{}`                                                                                                                      |
-| `podSecurityContext`      | Allows you to set the [securityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) for the pod                                                                                                                                                                                             | `{}`                                                                                                                      |
-| `serviceAccount`          | Allows you to overwite the "default" [serviceAccount](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the pod                                                                                                                                                                                                         | `[]`                                                                                                                      |
-| `antiAffinityTopologyKey` | The [anti-affinity topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity). By default this will prevent multiple Kibana instances from running on the same Kubernetes node                                                                                                                               | `kubernetes.io/hostname`                                                                                                  |
-| `antiAffinity`            | Setting this to hard enforces the [anti-affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity). If it is set to soft it will be done "best effort"                                                                                                                                                     | `hard`                                                                                                                    |
-| `httpPort`                | The http port that Kubernetes will use for the healthchecks and the service.                                                                                                                                                                                                                                                                                   | `5601`                                                                                                                    |
-| `maxUnavailable`          | The [maxUnavailable](https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget) value for the pod disruption budget. By default this will prevent Kubernetes from having more than 1 unhealthy pod                                                                                                                      | `1`                                                                                                                       |
-| `updateStrategy`          | Allows you to change the default update [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment) for the deployment. A [standard upgrade](https://www.elastic.co/guide/en/kibana/current/upgrade-standard.html) of Kibana requires a full stop and start which is why the default strategy is set to `Recreate` | `Recreate`                                                                                                                |
-| `readinessProbe`          | Configuration for the [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/)                                                                                                                                                                                                                          | `failureThreshold: 3`<br>`initialDelaySeconds: 10`<br>`periodSeconds: 10`<br>`successThreshold: 3`<br>`timeoutSeconds: 5` |
-| `imagePullSecrets`        | Configuration for [imagePullSecrets](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-pod-that-uses-your-secret) so that you can use a private registry for your image                                                                                                                                           | `[]`                                                                                                                      |
-| `nodeSelector`            | Configurable [nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) so that you can target specific nodes for your Kibana instances                                                                                                                                                                                   | `{}`                                                                                                                      |
-| `tolerations`             | Configurable [tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)                                                                                                                                                                                                                                                            | `[]`                                                                                                                      |
-| `ingress`                 | Configurable [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) to expose the Kibana service. See [`values.yaml`](./values.yaml) for an example                                                                                                                                                                                       | `enabled: false`                                                                                                          |
+The following table lists the configurable parameters of the kibana chart and their default values.
 
-## Examples
+| Parameter                                  | Description                                                            | Default                               |
+| ------------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------- |
+| `affinity`                                 | node/pod affinities                                                    | None                                  |
+| `env`                                      | Environment variables to configure Kibana                              | `{}`                                  |
+| `files`                                    | Kibana configuration files                                             | None                                  |
+| `livenessProbe.enabled`                    | livenessProbe to be enabled?                                           | `false`                               |
+| `livenessProbe.path`                       | path for livenessProbe                                                 | `/status`                             |
+| `livenessProbe.initialDelaySeconds`        | number of seconds                                                      | 30                                    |
+| `livenessProbe.timeoutSeconds`             | number of seconds                                                      | 10                                    |
+| `image.pullPolicy`                         | Image pull policy                                                      | `IfNotPresent`                        |
+| `image.repository`                         | Image repository                                                       | `docker.elastic.co/kibana/kibana-oss` |
+| `image.tag`                                | Image tag                                                              | `6.7.0`                               |
+| `image.pullSecrets`                        | Specify image pull secrets                                             | `nil`                                 |
+| `commandline.args`                         | add additional commandline args                                        | `nil`                                 |
+| `ingress.enabled`                          | Enables Ingress                                                        | `false`                               |
+| `ingress.annotations`                      | Ingress annotations                                                    | None:                                 |
+| `ingress.hosts`                            | Ingress accepted hostnames                                             | None:                                 |
+| `ingress.tls`                              | Ingress TLS configuration                                              | None:                                 |
+| `nodeSelector`                             | node labels for pod assignment                                         | `{}`                                  |
+| `podAnnotations`                           | annotations to add to each pod                                         | `{}`                                  |
+| `podLabels`                                | labels to add to each pod                                              | `{}`                                  |
+| `replicaCount`                             | desired number of pods                                                 | `1`                                   |
+| `revisionHistoryLimit`                     | revisionHistoryLimit                                                   | `3`                                   |
+| `serviceAccountName`                       | DEPRECATED: use serviceAccount.name                                    | `nil`                                 |
+| `serviceAccount.create`                    | create a serviceAccount to run the pod                                 | `false`                               |
+| `serviceAccount.name`                      | name of the serviceAccount to create                                   | `kibana.fullname`                     |
+| `authProxyEnabled`                         | enables authproxy. Create container in extracontainers                 | `false`                               |
+| `extraContainers`                          | Sidecar containers to add to the kibana pod                            | `{}`                                  |
+| `extraVolumeMounts`                        | additional volumemounts for the kibana pod                             | `[]`                                  |
+| `extraVolumes`                             | additional volumes to add to the kibana pod                            | `[]`                                  |
+| `resources`                                | pod resource requests & limits                                         | `{}`                                  |
+| `priorityClassName`                        | priorityClassName                                                      | `nil`                                 |
+| `service.externalPort`                     | external port for the service                                          | `443`                                 |
+| `service.internalPort`                     | internal port for the service                                          | `4180`                                |
+| `service.portName`                         | service port name                                                      | None:                                 |
+| `service.authProxyPort`                    | port to use when using sidecar authProxy                               | None:                                 |
+| `service.externalIPs`                      | external IP addresses                                                  | None:                                 |
+| `service.loadBalancerIP`                   | Load Balancer IP address                                               | None:                                 |
+| `service.loadBalancerSourceRanges`         | Limit load balancer source IPs to list of CIDRs (where available))     | `[]`                                  |
+| `service.nodePort`                         | NodePort value if service.type is NodePort                             | None:                                 |
+| `service.type`                             | type of service                                                        | `ClusterIP`                           |
+| `service.clusterIP`                        | static clusterIP or None for headless services                         | None:                                 |
+| `service.annotations`                      | Kubernetes service annotations                                         | None:                                 |
+| `service.labels`                           | Kubernetes service labels                                              | None:                                 |
+| `service.selector`                         | Kubernetes service selector                                            | `{}`                                  |
+| `tolerations`                              | List of node taints to tolerate                                        | `[]`                                  |
+| `dashboardImport.enabled`                  | Enable dashboard import                                                | `false`                               |
+| `dashboardImport.timeout`                  | Time in seconds waiting for Kibana to be in green overall state        | `60`                                  |
+| `dashboardImport.xpackauth.enabled`        | Enable Xpack auth                                                      | `false`                               |
+| `dashboardImport.xpackauth.username`       | Optional Xpack username                                                | `myuser`                              |
+| `dashboardImport.xpackauth.password`       | Optional Xpack password                                                | `mypass`                              |
+| `dashboardImport.dashboards`               | Dashboards                                                             | `{}`                                  |
+| `plugins.enabled`                          | Enable installation of plugins.                                        | `false`                               |
+| `plugins.reset`                            | Optional : Remove all installed plugins before installing all new ones | `false`                               |
+| `plugins.values`                           | List of plugins to install. Format                                     | None:                                 |
+| `persistentVolumeClaim.enabled`            | Enable PVC for plugins                                                 | `false`                               |
+| `persistentVolumeClaim.existingClaim`      | Use your own PVC for plugins                                           | `false`                               |
+| `persistentVolumeClaim.annotations`        | Add your annotations for the PVC                                       | `{}`                                  |
+| `persistentVolumeClaim.accessModes`        | Acces mode to the PVC                                                  | `ReadWriteOnce`                       |
+| `persistentVolumeClaim.size`               | Size of the PVC                                                        | `5Gi`                                 |
+| `persistentVolumeClaim.storageClass`       | Storage class of the PVC                                               | None:                                 |
+| `readinessProbe.enabled`                   | readinessProbe to be enabled?                                          | `false`                               |
+| `readinessProbe.path`                      | path for readinessProbe                                                | `/status`                             |
+| `readinessProbe.initialDelaySeconds`       | number of seconds                                                      | 30                                    |
+| `readinessProbe.timeoutSeconds`            | number of seconds                                                      | 10                                    |
+| `readinessProbe.periodSeconds`             | number of seconds                                                      | 10                                    |
+| `readinessProbe.successThreshold`          | number of successes                                                    | 5                                     |
+| `securityContext.enabled`                  | Enable security context (should be true for PVC)                       | `false`                               |
+| `securityContext.allowPrivilegeEscalation` | Allow privilege escalation                                             | `false`                               |
+| `securityContext.runAsUser`                | User id to run in pods                                                 | `1000`                                |
+| `securityContext.fsGroup`                  | fsGroup id to run in pods                                              | `2000`                                |
+| `extraConfigMapMounts`                     | Additional configmaps to be mounted                                    | `[]`                                  |
+| `deployment.annotations`                   | Annotations for deployment                                             | `{}`                                  |
+| `initContainers`                           | Init containers to add to the kibana deployment                        | `{}`                                  |
+| `testFramework.image`                      | `test-framework` image repository.                                     | `dduportal/bats`                      |
+| `testFramework.tag`                        | `test-framework` image tag.                                            | `0.4.0`                               |
 
-In [examples/](./examples) you will find some example configurations. These examples are used for the automated testing of this helm chart
 
-### Default
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-* Deploy the [default Elasticsearch helm chart](../elasticsearch/README.md#default)
-* Deploy Kibana with the default values
-  ```
-  cd examples/default
-  make
-  ```
-* You can now setup a port forward and access Kibana at http://localhost:5601
-  ```
-  kubectl port-forward deployment/helm-kibana-default-kibana 5601
-  ```
+-   The Kibana configuration files config properties can be set through the `env` parameter too.
+-   All the files listed under this variable will overwrite any existing files by the same name in kibana config directory.
+-   Files not mentioned under this variable will remain unaffected.
 
-### Security
-
-* Deploy a [security enabled Elasticsearch cluster](../elasticsearch/README.md#security)
-* Deploy Kibana with the security example
-  ```
-  cd examples/security
-  make
-  ```
-* You can now setup a port forward and access Kibana at http://localhost:5601 with the credentials `elastic:changeme`
-  ```
-  kubectl port-forward deployment/helm-kibana-default-kibana 5601
-  ```
-
-
-## Testing
-
-This chart uses [pytest](https://docs.pytest.org/en/latest/) to test the templating logic. The dependencies for testing can be installed from the [`requirements.txt`](../requirements.txt) in the parent directory.
-
+```console
+$ helm install stable/kibana --name my-release \
+  --set=image.tag=v0.0.2,resources.limits.cpu=200m
 ```
-pip install -r ../requirements.txt
-make test
+
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example :
+
+```console
+$ helm install stable/kibana --name my-release -f values.yaml
 ```
 
+> **Tip**: You can use the default [values.yaml](values.yaml)
 
-You can also use `helm template` to look at the YAML being generated
+## Dasboard import
 
-```
-make template
-```
+-   A dashboard for dashboardImport.dashboards can be a JSON or a download url to a JSON file.
 
-It is possible to run all of the tests and linting inside of a docker container
+## Upgrading
 
-```
-make test
-```
+### To 2.3.0
+
+The default value of `elasticsearch.url` (for kibana < 6.6) has been removed in favor of `elasticsearch.hosts` (for kibana >= 6.6).
