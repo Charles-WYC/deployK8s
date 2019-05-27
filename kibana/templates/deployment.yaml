@@ -24,9 +24,6 @@ spec:
         configchecksum: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
         {{- end }}
     spec:
-{{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName }}
-{{- end }}
 {{- if .Values.podSecurityContext }}
       securityContext:
 {{ toYaml .Values.podSecurityContext | indent 8 }}
@@ -65,12 +62,13 @@ spec:
       - name: kibana
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         env:
+          {{- if .Values.elasticsearchHosts }}
+          - name: ELASTICSEARCH_HOSTS
+            value: "{{ .Values.elasticsearchHosts }}"
+          {{- end }}
           {{- if .Values.elasticsearchURL }}
           - name: ELASTICSEARCH_URL
             value: "{{ .Values.elasticsearchURL }}"
-          {{- else if .Values.elasticsearchHosts }}
-          - name: ELASTICSEARCH_HOSTS
-            value: "{{ .Values.elasticsearchHosts }}"
           {{- end }}
 {{- if .Values.extraEnvs }}
 {{ toYaml .Values.extraEnvs | indent 10 }}
@@ -94,7 +92,7 @@ spec:
                     curl -k "$@" "{{ .Values.protocol }}://localhost:{{ .Values.httpPort }}${path}"
                 }
   
-                http "{{ .Values.healthCheckPath }}"
+                http "/app/kibana"
         ports:
         - containerPort: {{ .Values.httpPort }}
         resources:

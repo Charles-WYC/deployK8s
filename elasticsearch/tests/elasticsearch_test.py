@@ -48,13 +48,11 @@ def test_defaults():
             }
         },
         {
-            'name': 'cluster.initial_master_nodes',
-            'value': uname + '-0,' +
-                     uname + '-1,' +
-                     uname + '-2,'
+            'name': 'discovery.zen.minimum_master_nodes',
+            'value': '2'
         },
         {
-            'name': 'discovery.seed_hosts',
+            'name': 'discovery.zen.ping.unicast.hosts',
             'value': uname + '-headless'
 
         },
@@ -128,6 +126,7 @@ def test_defaults():
     assert v['metadata']['name'] == uname
     assert v['spec']['accessModes'] == ['ReadWriteOnce']
     assert v['spec']['resources']['requests']['storage'] == '30Gi'
+    assert v['spec']['storageClassName'] == 'standard'
 
     # Init container
     i = r['statefulset'][uname]['spec']['template']['spec']['initContainers'][0]
@@ -200,7 +199,6 @@ imageTag: 6.2.4
 
 def test_set_discovery_hosts_to_custom_master_service():
     config = '''
-esMajorVersion: 6
 masterService: "elasticsearch-custommaster"
 '''
     r = helm_template(config)
@@ -208,10 +206,8 @@ masterService: "elasticsearch-custommaster"
     assert {'name': 'discovery.zen.ping.unicast.hosts',
             'value': 'elasticsearch-custommaster-headless'} in env
 
-
 def test_set_master_service_to_default_nodegroup_name_if_not_set():
     config = '''
-esMajorVersion: 6
 nodeGroup: "data"
 '''
     r = helm_template(config)
@@ -219,10 +215,8 @@ nodeGroup: "data"
     assert {'name': 'discovery.zen.ping.unicast.hosts',
             'value': 'elasticsearch-master-headless'} in env
 
-
 def test_set_master_service_to_default_nodegroup_name_with_custom_cluster_name():
     config = '''
-esMajorVersion: 6
 clusterName: "custom"
 nodeGroup: "data"
 '''
@@ -250,7 +244,6 @@ roles:
     for e in env:
         assert e['name'] != 'discovery.zen.minimum_master_nodes'
 
-
 def test_dont_set_initial_master_nodes_if_not_master_when_using_es_version_7():
     config = '''
 esMajorVersion: 7
@@ -261,24 +254,6 @@ roles:
     env = r['statefulset'][uname]['spec']['template']['spec']['containers'][0]['env']
     for e in env:
         assert e['name'] != 'cluster.initial_master_nodes'
-
-
-def test_set_discovery_seed_host_when_using_v_7():
-    config = '''
-esMajorVersion: 7
-roles:
-  master: "true"
-'''
-    r = helm_template(config)
-    env = r['statefulset'][uname]['spec']['template']['spec']['containers'][0]['env']
-    assert {
-            'name': 'discovery.seed_hosts',
-            'value': 'elasticsearch-master-headless'
-        } in env
-
-    for e in env:
-        assert e['name'] != 'discovery.zen.ping.unicast.hosts'
-
 
 def test_enabling_machine_learning_role():
     config = '''
@@ -301,46 +276,6 @@ extraEnvs:
     r = helm_template(config)
     env = r['statefulset'][uname]['spec']['template']['spec']['containers'][0]['env']
     assert {'name': 'hello', 'value': 'world'} in env
-
-
-def test_adding_a_extra_volume_with_volume_mount():
-    config = '''
-extraVolumes: |
-  - name: extras
-    emptyDir: {}
-extraVolumeMounts: |
-  - name: extras
-    mountPath: /usr/share/extras
-    readOnly: true
-'''
-    r = helm_template(config)
-    extraVolume = r['statefulset'][uname]['spec']['template']['spec']['volumes']
-    assert {'name': 'extras', 'emptyDir': {}} in extraVolume
-    extraVolumeMounts = r['statefulset'][uname]['spec']['template']['spec']['containers'][0]['volumeMounts']
-    assert {'name': 'extras', 'mountPath': '/usr/share/extras', 'readOnly': True} in extraVolumeMounts
-
-
-def test_adding_a_extra_init_container():
-    config = '''
-extraInitContainers: |
-  - name: do-something
-    image: busybox
-    command: ['do', 'something']
-'''
-    r = helm_template(config)
-    extraInitContainer = r['statefulset'][uname]['spec']['template']['spec']['initContainers']
-    assert {'name': 'do-something', 'image': 'busybox', 'command': ['do', 'something'], } in extraInitContainer
-
-
-def test_adding_storageclass_annotation_to_volumeclaimtemplate():
-    config = '''
-persistence:
-  annotations:
-    volume.beta.kubernetes.io/storage-class: id
-'''
-    r = helm_template(config)
-    annotations = r['statefulset'][uname]['spec']['volumeClaimTemplates'][0]['metadata']['annotations']
-    assert {'volume.beta.kubernetes.io/storage-class': 'id'} == annotations
 
 
 def test_adding_a_secret_mount():
@@ -544,28 +479,3 @@ esConfig:
     assert {'mountPath': '/usr/share/elasticsearch/config/log4j2.properties', 'name': 'esconfig', 'subPath': 'log4j2.properties'} in s['containers'][0]['volumeMounts']
 
     assert 'configchecksum' in r['statefulset'][uname]['spec']['template']['metadata']['annotations']
-
-def test_dont_add_data_volume_when_persistance_is_disabled():
-    config = '''
-persistence:
-  enabled: false
-'''
-    r = helm_template(config)
-    assert 'volumeClaimTemplates' not in r['statefulset'][uname]['spec']
-    assert r['statefulset'][uname]['spec']['template']['spec']['containers'][0]['volumeMounts'] == None
-
-
-def test_priority_class_name():
-    config = '''
-priorityClassName: ""
-'''
-    r = helm_template(config)
-    spec = r['statefulset'][uname]['spec']['template']['spec']
-    assert 'priorityClassName' not in spec
-
-    config = '''
-priorityClassName: "highest"
-'''
-    r = helm_template(config)
-    priority_class_name = r['statefulset'][uname]['spec']['template']['spec']['priorityClassName']
-    assert priority_class_name == "highest"

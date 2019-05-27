@@ -4,8 +4,9 @@ sys.path.insert(1, os.path.join(sys.path[0], '../../helpers'))
 from helpers import helm_template
 import yaml
 
-name = 'release-name-kibana'
-elasticsearchHosts = 'http://elasticsearch-master:9200'
+name = 'RELEASE-NAME-kibana'
+version = '6.6.2'
+elasticsearchURL = 'http://elasticsearch-master:9200'
 
 
 def test_defaults():
@@ -21,17 +22,14 @@ def test_defaults():
     assert s['ports'][0]['port'] == 5601
     assert s['ports'][0]['name'] == 'http'
     assert s['ports'][0]['protocol'] == 'TCP'
-    assert s['ports'][0]['targetPort'] == 5601
 
     c = r['deployment'][name]['spec']['template']['spec']['containers'][0]
     assert c['name'] == 'kibana'
-    assert c['image'].startswith('docker.elastic.co/kibana/kibana:')
+    assert c['image'] == 'docker.elastic.co/kibana/kibana:' + version
     assert c['ports'][0]['containerPort'] == 5601
 
-    assert c['env'][0]['name'] == 'ELASTICSEARCH_HOSTS'
-    assert c['env'][0]['value'] == elasticsearchHosts
-
-    assert 'http "/app/kibana"' in c['readinessProbe']['exec']['command'][-1]
+    assert c['env'][0]['name'] == 'ELASTICSEARCH_URL'
+    assert c['env'][0]['value'] == elasticsearchURL
 
     # Empty customizable defaults
     assert 'imagePullSecrets' not in r['deployment'][name]['spec']['template']['spec']
@@ -73,8 +71,6 @@ def test_overriding_the_port():
 
     c = r['deployment'][name]['spec']['template']['spec']['containers'][0]
     assert c['ports'][0]['containerPort'] == 5602
-
-    assert r['service'][name]['spec']['ports'][0]['targetPort'] == 5602
 
 
 def test_adding_image_pull_secrets():
@@ -229,28 +225,3 @@ protocol: https
     r = helm_template(config)
     c = r['deployment'][name]['spec']['template']['spec']['containers'][0]
     assert 'https://' in c['readinessProbe']['exec']['command'][-1]
-
-def test_changing_the_health_check_path():
-    config = '''
-healthCheckPath: "/kibana/app/kibana"
-'''
-    r = helm_template(config)
-    c = r['deployment'][name]['spec']['template']['spec']['containers'][0]
-
-    assert 'http "/kibana/app/kibana"' in c['readinessProbe']['exec']['command'][-1]
-
-
-def test_priority_class_name():
-    config = '''
-priorityClassName: ""
-'''
-    r = helm_template(config)
-    spec = r['deployment'][name]['spec']['template']['spec']
-    assert 'priorityClassName' not in spec
-
-    config = '''
-priorityClassName: "highest"
-'''
-    r = helm_template(config)
-    priority_class_name = r['deployment'][name]['spec']['template']['spec']['priorityClassName']
-    assert priority_class_name == "highest"
