@@ -140,7 +140,7 @@ master:
     accessMode: ReadWriteOnce
     name: data
     size: "4Gi"
-    # storageClass: "ssd"
+    storageClass: "nfs-storage"
   readinessProbe:
     httpGet:
       path: /_cluster/health?local=true
@@ -187,7 +187,7 @@ data:
     accessMode: ReadWriteOnce
     name: data
     size: "30Gi"
-    # storageClass: "ssd"
+    storageClass: "nfs-storage"
   readinessProbe:
     httpGet:
       path: /_cluster/health?local=true
