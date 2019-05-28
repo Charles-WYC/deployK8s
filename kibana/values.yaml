@@ -38,11 +38,12 @@ deployment:
   annotations: {}
 
 service:
-  type: ClusterIP
+  type: NodePort
   # clusterIP: None
   # portName: kibana-svc
   externalPort: 443
   internalPort: 5601
+  nodePort: 30309
   # authProxyPort: 5602 To be used with authProxyEnabled and a proxy extraContainer
   ## External IP addresses of service
   ## Default: nil
