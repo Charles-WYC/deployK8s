@@ -136,7 +136,7 @@ master:
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   persistence:
-    enabled: true
+    enabled: false
     accessMode: ReadWriteOnce
     name: data
     size: "4Gi"
@@ -183,7 +183,7 @@ data:
   heapSize: "1536m"
   # additionalJavaOpts: "-XX:MaxRAM=1536m"
   persistence:
-    enabled: true
+    enabled: false
     accessMode: ReadWriteOnce
     name: data
     size: "30Gi"
