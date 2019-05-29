@@ -13,8 +13,8 @@ roles:
   ingest: "true"
   data: "true"
 
-replicas: 3
-minimumMasterNodes: 2
+replicas: 1
+minimumMasterNodes: 1
 
 esMajorVersion: 7
 
@@ -37,10 +37,10 @@ extraEnvs: []
 # A list of secrets and their paths to mount inside the pod
 # This is useful for mounting certificates for security and for mounting
 # the X-Pack license
-secretMounts:
- - name: elastic-certificates
-   secretName: elastic-certificates
-   path: /usr/share/elasticsearch/config/certs
+secretMounts: []
+#  - name: elastic-certificates
+#    secretName: elastic-certificates
+#    path: /usr/share/elasticsearch/config/certs
 
 image: "docker.elastic.co/elasticsearch/elasticsearch"
 imageTag: "7.1.0"
