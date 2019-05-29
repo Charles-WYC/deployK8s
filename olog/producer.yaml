@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: producer
+  name: producer
+spec:
+  selector:
+    matchLabels:
+      app: producer
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: producer
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9100"
+
+    spec:
+      containers:
+      - name: simulator
+        # image: xiaoyaolang/o_log_simulator
+        image: xiaoyaolang/o_log_simulator
+        imagePullPolicy: Always
+        # imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: simulator-conf
+          mountPath: "/home/conf/"
+        - name: cache
+          mountPath: "/home/DataDir"
+        # command:
+        #   - "python"
+        #   - "/home/generateData.py"
+
+      - name: conveyor
+        # image: xiaoyaolang/o_log_conveyor:latest
+        image: xiaoyaolang/o_log_conveyor:test
+        imagePullPolicy: Always
+        # imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: conveyor-conf
+          mountPath: "/home/conf/"
+        - name: cache
+          mountPath: "/home/DataDir"
+        resources:
+          limits:
+            cpu: "1"
+            memory: 0
+        ports:
+        - name: exporter
+          containerPort: 9100
+          protocol: TCP
+
+        # command:
+        #   - "/home/conveyor"
+
+      volumes:
+      - name: cache
+        emptyDir: {}
+      - name: simulator-conf
+        configMap:
+          name: olog-config-map
+          items:
+            - key: conf.json
+              path: conf.json
+      - name: conveyor-conf
+        configMap:
+          name: olog-config-map
+          items:
+            - key: conveyor.xml
+              path: conveyor.xml
+      
+      

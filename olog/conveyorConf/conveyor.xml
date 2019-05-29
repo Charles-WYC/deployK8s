@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<conveyor
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="conveyor.xsd">
+    <hostId>opdlvm0001</hostId>
+    <zookeeper>zk-zookeeper.kube-public.svc.cluster.local:2181</zookeeper>
+    <quotas>
+        <quota>1024</quota>
+        <quota>1024*1024*4</quota>
+    </quotas>
+    <groups>
+        <group>
+            <worker>
+                <filePath>/home/DataDir/rb1000.log</filePath>
+                <brokers>10.1.0.11:9092</brokers>
+                <topic>rb1000</topic>
+                <backupType>disk</backupType>
+                <filters>
+                    <filter>
+                        <!-- <filterType>empty</filterType> -->
+                        <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\].*</filterRule>
+                    </filter>
+                </filters>
+            </worker>
+            <worker>
+                <filePath>/home/DataDir/rb1001.log</filePath>
+                <brokers>10.1.0.11:9092</brokers>
+                <topic>rb1001</topic>
+                <backupType>disk</backupType>
+                <filters>
+                    <filter>
+                        <!-- <filterType>empty</filterType> -->
+                        <!-- <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\]\s\[Data\]\sLIMon_StatisticsFeed.*</filterRule> -->
+                        <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\].*</filterRule>
+                    </filter>
+                </filters>
+            </worker>
+            <worker>
+                <filePath>/home/DataDir/rb1002.log</filePath>
+                <brokers>10.1.0.11:9092</brokers>
+                <topic>rb1002</topic>
+                <backupType>disk</backupType>
+                <filters>
+                    <filter>
+                        <!-- <filterType>empty</filterType> -->
+                        <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\].*</filterRule>
+                    </filter>
+                </filters>
+            </worker>
+            <worker>
+                <filePath>/home/DataDir/rb1003.log</filePath>
+                <brokers>10.1.0.11:9092</brokers>
+                <topic>rb1003</topic>
+                <backupType>disk</backupType>
+                <filters>
+                    <filter>
+                        <!-- <filterType>empty</filterType> -->
+                        <!-- <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\]\s\[Data\]\sLIMon_StatisticsFeed.*</filterRule> -->
+                        <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\].*</filterRule>
+                    </filter>
+                </filters>
+            </worker>
+            <worker>
+                <filePath>/home/DataDir/rb1004.log</filePath>
+                <brokers>10.1.0.11:9092</brokers>
+                <topic>rb1004</topic>
+                <backupType>disk</backupType>
+                <filters>
+                    <filter>
+                        <!-- <filterType>empty</filterType> -->
+                        <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\].*</filterRule>
+                    </filter>
+                </filters>
+            </worker>
+            <worker>
+                <filePath>/home/DataDir/rb1005.log</filePath>
+                <brokers>10.1.0.11:9092</brokers>
+                <topic>rb1005</topic>
+                <backupType>disk</backupType>
+                <filters>
+                    <filter>
+                        <!-- <filterType>empty</filterType> -->
+                        <!-- <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\]\s\[Data\]\sLIMon_StatisticsFeed.*</filterRule> -->
+                        <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\].*</filterRule>
+                    </filter>
+                </filters>
+            </worker>
+        </group>
+        <group>
+            <worker>
+                <filePath>/home/DataDir/rb1006.log</filePath>
+                <brokers>10.1.0.11:9092</brokers>
+                <topic>rb1006</topic>
+                <backupType>disk</backupType>
+                <filters>
+                    <filter>
+                        <!-- <filterType>empty</filte/rType> -->
+                        <!-- <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\]\s\[Data\]\sLIMon_PriceFeed.*</filterRule> -->
+                        <filterType>regex</filterType>
+                        <filterRule>^[0-9]{13}\s\[Info\s+\]\s\[DATA_RECORDER\].*</filterRule>
+                    </filter>
+                </filters>
+            </worker>
+        </group>
+    </groups>
+</conveyor>

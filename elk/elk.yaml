@@ -24,7 +24,7 @@ spec:
       containers:
       - name: elk
         image: sebp/elk
-        # image: registry-vpc.cn-shanghai.aliyuncs.com/chongyi/o_log_simulator
+        # image: xiaoyaolang/o_log_simulator
         # imagePullPolicy: Always
         imagePullPolicy: IfNotPresent
         ports:
@@ -41,13 +41,13 @@ spec:
       volumes:
       - name: logstash-conf
         configMap:
-          name: my-config-map
+          name: elk-config-map
           items:
             - key: logstash.conf
               path: logstash.conf
       - name: logstash-yml
         configMap:
-          name: my-config-map
+          name: elk-config-map
           items:
             - key: logstash.yml
               path: logstash.yml

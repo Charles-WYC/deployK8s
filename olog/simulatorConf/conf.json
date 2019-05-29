@@ -1,0 +1,46 @@
+{
+    "base":{
+        "instrumentAmount": 7,
+        "messageType": 3,
+        "enableNoise": true,
+        "feedCodeStartId": 1000,
+        "timeLength": 600000
+    },
+    "drop":{
+        "instrumentAmount": 1,
+        "feedCodeStartId": 1,
+        "dropAmount": 6000,
+        "dropInterval": 100
+    },
+    "delay":{
+        "instrumentAmount": 1,
+        "feedCodeStartId": 2,
+        "delayAmount": 6000,
+        "delayInterval": 110,
+        "delayTimeLength": 360
+    },
+    "errorTurnover":{
+        "instrumentAmount": 1,
+        "feedCodeStartId": 3,
+        "errorAmount": 6000,
+        "errorInterval": 120
+    },
+    "errorBidAsk":{
+        "instrumentAmount": 1,
+        "feedCodeStartId": 4,
+        "errorAmount": 6000,
+        "errorInterval": 130
+    },
+    "errorPrice":{
+        "instrumentAmount": 1,
+        "feedCodeStartId": 5,
+        "errorAmount": 6000,
+        "errorInterval": 140
+    },
+    "errorVolume":{
+        "instrumentAmount": 1,
+        "feedCodeStartId": 6,
+        "errorAmount": 6000,
+        "errorInterval": 150
+    }
+}
