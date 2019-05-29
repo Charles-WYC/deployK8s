@@ -16,14 +16,14 @@ spec:
     spec:
       initContainers:
       - name: set-vm-max-map-count
-        image: registry-vpc.cn-shanghai.aliyuncs.com/chongyi/o_log_busybox
+        image: busybox
         imagePullPolicy: IfNotPresent
         command: ['sysctl', '-w', 'vm.max_map_count=262144']
         securityContext:
           privileged: true
       containers:
       - name: elk
-        image: registry-vpc.cn-shanghai.aliyuncs.com/chongyi/o_log_elk
+        image: sebp/elk
         # image: registry-vpc.cn-shanghai.aliyuncs.com/chongyi/o_log_simulator
         # imagePullPolicy: Always
         imagePullPolicy: IfNotPresent
