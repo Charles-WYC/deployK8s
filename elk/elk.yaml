@@ -61,7 +61,7 @@ spec:
   type: NodePort
   ports:
   - port: 5601
-  - nodePort: 30301
+    nodePort: 30301
   selector:
     app: elk
 
