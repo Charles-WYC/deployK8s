@@ -26,7 +26,7 @@ service:
   # - 0.0.0.0/0
   externalPort: 8080
   internalPort: 8080
-  nodeProt: 30303
+  nodePort: 30303
 ## Make sure the javaOps and resources are aligned to avoid conflicts
 javaOpts: "-Xms512m -Xmx2g"
 resources:
