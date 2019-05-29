@@ -10,11 +10,13 @@ metadata:
     weave-scope-component: app
   namespace: weave
 spec:
+  type: NodePort
   ports:
     - name: app
       port: 80
       protocol: TCP
       targetPort: 4040
+      nodePort: 30302
   selector:
     name: weave-scope-app
     app: weave-scope
