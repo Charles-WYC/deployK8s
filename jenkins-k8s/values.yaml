@@ -7,7 +7,7 @@ initContainerImage: "alpine:3.6"
 replicaCount: 1
 imagePullSecrets:
 image:
-  repository: eldada-docker-examples.bintray.io/jenkins
+  repository: xiaoyaolang/jenkins
   tag: lts-k8s
   pullPolicy: Always
 did:
