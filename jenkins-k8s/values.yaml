@@ -22,8 +22,8 @@ service:
   name: jenkins-k8s
   type: NodePort
   ## Whitelist the IPs that can access Jenkins
-  loadBalancerSourceRanges:
-  - 0.0.0.0/0
+  # loadBalancerSourceRanges:
+  # - 0.0.0.0/0
   externalPort: 8080
   internalPort: 8080
   nodeProt: 30303
