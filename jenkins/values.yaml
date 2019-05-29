@@ -78,9 +78,10 @@ master:
   # fsGroup: <will be omitted in deployment if runAsUser is 0>
   servicePort: 8080
   targetPort: 8080
+  nodePort: 30303
   # For minikube, set this to NodePort, elsewhere use LoadBalancer
   # Use ClusterIP if your setup includes ingress controller
-  serviceType: LoadBalancer
+  serviceType: NodePort
   # Jenkins master service annotations
   serviceAnnotations: {}
   # Jenkins master custom labels
