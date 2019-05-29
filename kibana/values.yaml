@@ -16,23 +16,23 @@ env:
   ## Ref: https://www.elastic.co/guide/en/kibana/current/settings.html
   ## For kibana < 6.6, use ELASTICSEARCH_URL instead
   ELASTICSEARCH_HOSTS: http://elas-elasticsearch-client:9200
-  # SERVER_PORT: 5601
-  # LOGGING_VERBOSE: "true"
-  # SERVER_DEFAULTROUTE: "/app/kibana"
+  SERVER_PORT: 5601
+  LOGGING_VERBOSE: "true"
+  SERVER_DEFAULTROUTE: "/app/kibana"
 
 files:
   kibana.yml:
     ## Default Kibana configuration from kibana-docker.
     server.name: kibana
-    server.host: "0"
+    server.host: "kiba-kibana"
     ## For kibana < 6.6, use elasticsearch.url instead
     elasticsearch.hosts: http://elas-elasticsearch-client:9200
 
     ## Custom config properties below
     ## Ref: https://www.elastic.co/guide/en/kibana/current/settings.html
-    # server.port: 5601
-    # logging.verbose: "true"
-    # server.defaultRoute: "/app/kibana"
+    server.port: 5601
+    logging.verbose: "true"
+    server.defaultRoute: "/app/kibana"
 
 deployment:
   annotations: {}
@@ -43,7 +43,7 @@ service:
   # portName: kibana-svc
   externalPort: 443
   internalPort: 5601
-  nodePort: 30309
+  nodePort: 30302
   # authProxyPort: 5602 To be used with authProxyEnabled and a proxy extraContainer
   ## External IP addresses of service
   ## Default: nil
@@ -87,13 +87,13 @@ serviceAccount:
   name:
 
 livenessProbe:
-  enabled: false
+  enabled: true
   path: /status
   initialDelaySeconds: 30
   timeoutSeconds: 10
 
 readinessProbe:
-  enabled: false
+  enabled: true
   path: /status
   initialDelaySeconds: 30
   timeoutSeconds: 10
