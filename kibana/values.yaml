@@ -15,16 +15,16 @@ env:
   ## To adjust a config option to an env var uppercase + replace `.` with `_`
   ## Ref: https://www.elastic.co/guide/en/kibana/current/settings.html
   ## For kibana < 6.6, use ELASTICSEARCH_URL instead
-  ELASTICSEARCH_HOSTS: http://10.233.31.219:9200
-  SERVER_PORT: 5601
-  LOGGING_VERBOSE: "true"
-  SERVER_DEFAULTROUTE: "/app/kibana"
+  # ELASTICSEARCH_HOSTS: http://10.233.31.219:9200
+  # SERVER_PORT: 5601
+  # LOGGING_VERBOSE: "true"
+  # SERVER_DEFAULTROUTE: "/app/kibana"
 
 files:
   kibana.yml:
     ## Default Kibana configuration from kibana-docker.
     server.name: kibana
-    server.host: "0.0.0.0"
+    server.host: ""
     ## For kibana < 6.6, use elasticsearch.url instead
     elasticsearch.hosts: http://10.233.31.219:9200
 
