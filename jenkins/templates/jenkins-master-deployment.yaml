@@ -76,7 +76,7 @@ spec:
       hostAliases:
         {{- toYaml .Values.master.hostAliases | nindent 8 }}
       {{- end }}
-      containers:
+      initContainers:
 {{- if .Values.master.customInitContainers }}
 {{ tpl (toYaml .Values.master.customInitContainers) . | indent 8 }}
 {{- end }}
