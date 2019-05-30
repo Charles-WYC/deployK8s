@@ -60,6 +60,7 @@ kind: Service
 metadata:
   name: kibana
 spec:
+  externalTrafficPolicy: Cluster
   type: NodePort
   ports:
   - port: 5601
