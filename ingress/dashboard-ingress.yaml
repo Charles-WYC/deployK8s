@@ -15,6 +15,6 @@ spec:
     - host: dashboard.wyc.cn
       http:
         paths:
-          backend:
+        - backend:
             serviceName: kubernetes-dashboard
             servicePort: 443
