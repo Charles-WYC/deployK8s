@@ -1,0 +1,1 @@
+kubectl delete secret kubernetes-dashboard-certs -n kube-system
