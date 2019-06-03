@@ -22,7 +22,7 @@ controller:
   # Required for use with CNI based kubernetes installations (such as ones set up by kubeadm),
   # since CNI and hostport don't mix yet. Can be deprecated once https://github.com/kubernetes/kubernetes/issues/23920
   # is merged
-  hostNetwork: true
+  hostNetwork: false
 
   # Optionally change this to ClusterFirstWithHostNet in case you have 'hostNetwork: true'.
   # By default, while using host network, name resolution uses the host's DNS. If you wish nginx-controller
@@ -31,11 +31,11 @@ controller:
 
   ## Use host ports 80 and 443
   daemonset:
-    useHostPort: true
+    useHostPort: false
 
     hostPorts:
-      http: 30305
-      https: 30306
+      http: 80
+      https: 443
       ## healthz endpoint
       stats: 18080
 
@@ -198,15 +198,15 @@ controller:
       http: http
       https: https
 
-    type: LoadBalancer
+    # type: LoadBalancer
 
-    # type: NodePort
-    # nodePorts:
-    #   http: 32080
-    #   https: 32443
+    type: NodePort
     nodePorts:
-      http: ""
-      https: ""
+      http: 30308
+      https: 30309
+    # nodePorts:
+    #   http: ""
+    #   https: ""
 
   extraContainers: []
   ## Additional containers to be added to the controller pod.
