@@ -15,7 +15,7 @@ spec:
         app: elk
     spec:
       nodeSelector:
-        kubernetes.io/hostname: node-2
+        kubernetes.io/hostname: node-3
       initContainers:
       - name: set-vm-max-map-count
         image: busybox
