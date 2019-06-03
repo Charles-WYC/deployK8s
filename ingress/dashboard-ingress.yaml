@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: k8s-dashboard
+  namespace: kube-system
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+
+spec:
+  tls:
+   - secretName: ingress-dashboard-secret
+  rules:
+    - host: dashboard.wyc.cn
+      http:
+        paths:
+          backend:
+            serviceName: kubernetes-dashboard
+            servicePort: 443
