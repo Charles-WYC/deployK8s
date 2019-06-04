@@ -21,5 +21,7 @@ spec:
         image: xiaoyaolang/ipref:3.6
         # imagePullPolicy: Always
         imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5201
         command:
-          - "ipref3 -s"
+          - "iperf3 -s"
