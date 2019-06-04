@@ -23,5 +23,5 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5201
-        command: ["ipref"]
+        command: ["ipref3"]
         args: ["-s"]
