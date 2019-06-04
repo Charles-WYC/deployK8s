@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: ipref
+  name: ipref
+spec:
+  selector:
+    matchLabels:
+      app: ipref
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: ipref
+    spec:
+      containers:
+      - name: ipref
+        image: xiaoyaolang/ipref:3.6
+        # imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
