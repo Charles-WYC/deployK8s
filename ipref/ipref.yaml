@@ -14,6 +14,8 @@ spec:
       labels:
         app: ipref
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: node-3
       containers:
       - name: ipref
         image: xiaoyaolang/ipref:3.6
