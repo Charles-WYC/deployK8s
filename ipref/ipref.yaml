@@ -24,4 +24,4 @@ spec:
         ports:
         - containerPort: 5201
         command:
-          - "iperf3 -s"
+          - "/bin/bash iperf3 -s"
