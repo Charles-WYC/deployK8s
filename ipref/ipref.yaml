@@ -2,26 +2,26 @@ apiVersion: extensions/v1beta1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
   labels:
-    app: ipref
-  name: ipref
+    app: iperf
+  name: iperf
 spec:
   selector:
     matchLabels:
-      app: ipref
+      app: iperf
   replicas: 1 # tells deployment to run 2 pods matching the template
   template:
     metadata:
       labels:
-        app: ipref
+        app: iperf
     spec:
       nodeSelector:
         kubernetes.io/hostname: node-3
       containers:
-      - name: ipref
-        image: xiaoyaolang/ipref:3.6
+      - name: iperf
+        image: xiaoyaolang/iperf:3.6
         # imagePullPolicy: Always
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5201
-        command: ["ipref3"]
+        command: ["iperf3"]
         args: ["-s"]
