@@ -19,3 +19,5 @@ spec:
         image: xiaoyaolang/ipref:3.6
         # imagePullPolicy: Always
         imagePullPolicy: IfNotPresent
+        command:
+          - "ipref3 -s"
