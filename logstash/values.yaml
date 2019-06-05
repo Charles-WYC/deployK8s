@@ -60,13 +60,13 @@ ports:
   #   protocol: TCP
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - logstash.cluster.local
+    - logstash.wyc.cn
   tls: []
   #  - secretName: logstash-tls
   #    hosts:
@@ -125,6 +125,8 @@ extraInitContainers: []
   #     - echo
   #     - hello
 
+podManagementPolicy: OrderedReady
+ # can be OrderReady or Parallel
 livenessProbe:
   httpGet:
     path: /
@@ -181,7 +183,7 @@ volumes: []
 
 exporter:
   logstash:
-    enabled: false
+    enabled: true
     image:
       repository: bonniernews/logstash_exporter
       tag: v0.1.2
@@ -211,7 +213,7 @@ exporter:
       successThreshold: 1
 
 elasticsearch:
-  host: elasticsearch-client.default.svc.cluster.local
+  host: elas-elasticsearch-client.default.svc.cluster.local
   port: 9200
 
 ## ref: https://github.com/elastic/logstash-docker/blob/master/build/logstash/env2yaml/env2yaml.go
@@ -279,9 +281,9 @@ inputs:
       #   port => 1514
       #   type => syslog
       # }
-      beats {
-        port => 5044
-      }
+      # beats {
+      #   port => 5044
+      # }
       # http {
       #   port => 8080
       # }
@@ -293,12 +295,50 @@ inputs:
       #   topics => ["source"]
       #   type => "example"
       # }
+      kafka {
+        ## ref: https://www.elastic.co/guide/en/logstash/current/plugins-inputs-kafka.html
+        bootstrap_servers => "10.1.0.11:9092,10.1.0.12:9092,10.1.0.13:9092"
+        consumer_threads => 1
+        client_id => "sink"
+        group_id => "logstash-es"
+        auto_offset_reset => "earliest"
+        auto_commit_interval_ms => "500"
+        enable_auto_commit => true
+        topics => ["Order", "Response", "Trade", "computeResult", "monitorResult", "rb1000", "rb1001", "rb1002", "rb1003", "rb1004", "rb1005", "rb1006", "kTable"]
+        decorate_events => "true"
+      }
     }
 
 filters:
-  # main: |-
-  #   filter {
-  #   }
+  main: |-
+    filter {
+      ruby {
+        code => "event.set('[@metadata][kafka][lc_topic]', event.get('[@metadata][kafka][topic]').split(/(?=[A-Z])/).map{|x| x.downcase }.join('_') )"
+      }
+      
+      if [@metadata][kafka][topic] =~ "Order" or [@metadata][kafka][topic] =~ "Response" or [@metadata][kafka][topic] =~ "Trade" or [@metadata][kafka][topic] =~ "monitorResult" or [@metadata][kafka][topic] =~ "computeResult" or [@metadata][kafka][topic] =~ "kTable" {
+        mutate {
+          add_field => { "@message" => "%{message}" }
+        }
+        json{
+          source => "@message"
+        }
+        mutate {
+          remove_field => ["@message", "@version", "_type", "_score"]
+        }
+      }
+
+      if [@metadata][kafka][topic] =~ "kTable" {
+        mutate {
+          convert => { "orderId" => "integer" }
+          convert => { "exchangeOrderId" => "integer" }
+          convert => { "status" => "integer" }
+          convert => { "volume" => "integer" }
+          convert => { "price" => "integer" }
+          convert => { "tradeVolume" => "integer" }
+        }
+      }
+    }
 
 outputs:
   main: |-
@@ -306,9 +346,10 @@ outputs:
       # stdout { codec => rubydebug }
       elasticsearch {
         hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
-        manage_template => false
-        index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
-        document_type => "%{[@metadata][type]}"
+        # manage_template => false
+        # index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+        # document_type => "%{[@metadata][type]}"
+        index => "sink-%{[@metadata][kafka][lc_topic]}"
       }
       # kafka {
       #   ## ref: https://www.elastic.co/guide/en/logstash/current/plugins-outputs-kafka.html
