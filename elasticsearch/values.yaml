@@ -120,15 +120,15 @@ client:
     minAvailable: 1
     # maxUnavailable: 1
   ingress:
-    enabled: false
+    enabled: true
     # user: NAME
     # password: PASSWORD
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
+    annotations:
+      kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
     path: /
     hosts:
-      - chart-example.local
+      - elastic.wyc.cn
     tls: []
     #  - secretName: chart-example-tls
     #    hosts:
