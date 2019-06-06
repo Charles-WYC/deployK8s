@@ -8,7 +8,7 @@ imagePullSecrets:
 ##
 serviceAccounts:
   alertmanager:
-    create: false
+    create: true
     name:
   kubeStateMetrics:
     create: true
@@ -26,7 +26,7 @@ serviceAccounts:
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
-  enabled: false
+  enabled: true
 
   ## alertmanager container name
   ##
@@ -81,12 +81,12 @@ alertmanager:
   ingress:
     ## If true, alertmanager Ingress will be created
     ##
-    enabled: false
+    enabled: true
 
     ## alertmanager Ingress annotations
     ##
-    annotations: {}
-    #   kubernetes.io/ingress.class: nginx
+    annotations:
+      kubernetes.io/ingress.class: nginx
     #   kubernetes.io/tls-acme: 'true'
 
     ## alertmanager Ingress additional labels
@@ -96,8 +96,8 @@ alertmanager:
     ## alertmanager Ingress hostnames with optional path
     ## Must be provided if Ingress is enabled
     ##
-    hosts: []
-    #   - alertmanager.domain.com
+    hosts:
+      - alertmanager.wyc.cn
     #   - domain.com/alertmanager
 
     ## alertmanager Ingress TLS configuration
