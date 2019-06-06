@@ -6,8 +6,9 @@ rbac:
 serviceAccount:
   create: true
   name:
+  nameTest:
 
-replicas: 3
+replicas: 1
 
 deploymentStrategy: RollingUpdate
 
@@ -24,14 +25,15 @@ livenessProbe:
   timeoutSeconds: 30
   failureThreshold: 10
 
+## Use an alternate scheduler, e.g. "stork".
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+# schedulerName: "default-scheduler"
+
 image:
   repository: grafana/grafana
-  tag: 5.4.4
+  tag: 6.2.0
   pullPolicy: IfNotPresent
-
-testFramework:
-  image: "dduportal/bats"
-  tag: "0.4.0"
 
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -39,6 +41,10 @@ testFramework:
   ##
   # pullSecrets:
   #   - myRegistrKeySecretName
+
+testFramework:
+  image: "dduportal/bats"
+  tag: "0.4.0"
 
 securityContext:
   runAsUser: 472
@@ -76,16 +82,15 @@ downloadDashboardsImage:
 ## ref: http://kubernetes.io/docs/user-guide/services/
 ##
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
   targetPort: 3000
-  nodePort: 30306
     # targetPort: 4181 To be used with a proxy extraContainer
   annotations: {}
   labels: {}
 
 ingress:
-  enabled: false
+  enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -151,7 +156,7 @@ persistence:
   size: 10Gi
   # annotations: {}
   # subPath: ""
-  existingClaim: "pvc-graf"
+  # existingClaim:
 
 initChownData:
   ## If false, data ownership will not be reset at startup

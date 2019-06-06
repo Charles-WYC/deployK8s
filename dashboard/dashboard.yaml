@@ -175,3 +175,29 @@ spec:
       targetPort: 8443
   selector:
     k8s-app: kubernetes-dashboard
+
+---
+# ------------------- Dashboard Ingress ------------------- #
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dashboard-ingress
+  namespace: kube-system
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
+spec:
+  tls:
+  - hosts:
+    - dashboard.wyc.cn
+    secretName: dashboard-tls
+  rules:
+    - host: dashboard.wyc.cn
+      http:
+        paths:
+        - backend:
+            serviceName: kubernetes-dashboard
+            servicePort: 443
