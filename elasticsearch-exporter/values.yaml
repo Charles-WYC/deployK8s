@@ -32,7 +32,9 @@ service:
   httpPort: 9108
   metricsPort:
     name: http
-  annotations: {}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9108"
   labels: {}
 
 es:
