@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: kibana-ingress
+  name: scope-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: kibana.wyc.cn
+  - host: scope.wyc.cn
     http:
       paths:
       - backend:
