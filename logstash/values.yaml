@@ -1,4 +1,4 @@
-replicaCount: 3
+replicaCount: 1
 
 podDisruptionBudget:
   maxUnavailable: 1
@@ -322,9 +322,13 @@ filters:
         }
         json{
           source => "@message"
+          target => "myroot"
+        }
+        json{
+          source => "myroot"
         }
         mutate {
-          remove_field => ["@message", "@version", "_type", "_score"]
+          remove_field => ["@message", "@version", "_type", "_score", "myroot"]
         }
       }
 
